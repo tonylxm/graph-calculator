@@ -38,7 +38,7 @@ public class MainTest {
     public void T1_C_roots() throws Exception {
       runCommands(OPEN_FILE, "c.txt", LIST_ROOT_VERTICIES);
       assertContains("Successfully opened graph from file c.txt");
-      assertContains("[0]");
+      assertContains("[0 1]");
     }
 
     @Test

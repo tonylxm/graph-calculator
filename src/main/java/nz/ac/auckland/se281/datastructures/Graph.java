@@ -1,5 +1,11 @@
+// AUTHOR: Tony Lim
+// DATE CREATED: 19/05/2023
+// LAST EDITED: 24/05/2023
+
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,16 +17,53 @@ import java.util.Set;
  * @param <T> The type of each vertex, that have a total ordering.
  */
 public class Graph<T extends Comparable<T>> {
-  public Graph(Set<T> verticies, Set<Edge<T>> edges) {}
+  private Set<T> verticies;
+  private Set<Edge<T>> edges;
+
+  public Graph(Set<T> verticies, Set<Edge<T>> edges) {
+    this.verticies = verticies;
+    this.edges = edges;
+  }
 
   public Set<T> getRoots() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    // Set of rootVertices is a subset of vertices of a graph
+    Set<T> rootVertices = verticies;
+    Set<T> equivalenceClassSet = new HashSet<>();
+
+    // Check if there are no incoming edges to the node
+    // i.e. the node is a not a destination of any edge, then it is a root vertice
+    // UNLESS it is a isolated node with a self-loop
+    for (Edge<T> edge : edges) {
+      if (rootVertices.contains(edge.getDestination())) {
+        rootVertices.remove(edge.getDestination()); // remove the non-root vertice from the set
+      }
+    }
+
+    // If the vertice is part of an equivalence class, it is a root vertice. If there are
+    // multiple vertices in one equivalence class, return the minimum value
+    for (T vertice : verticies) {
+      equivalenceClassSet = getEquivalenceClass(vertice);
+      if (!equivalenceClassSet.isEmpty()) {
+        rootVertices.add(Collections.min(equivalenceClassSet)); // is this allowed?
+      }
+    }
+    return rootVertices;
   }
 
   public boolean isReflexive() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    Set<T> setOfVertices = new HashSet<T>();
+
+    for (Edge<T> edge : edges) {
+      if (edge.getSource() == edge.getDestination()) {
+        setOfVertices.add(edge.getDestination());
+      }
+    }
+
+    // if all vertices have a reflexive relation, the whole graph is reflexive
+    if (setOfVertices.containsAll(verticies)) {
+      return true;
+    }
+    return false;
   }
 
   public boolean isSymmetric() {
