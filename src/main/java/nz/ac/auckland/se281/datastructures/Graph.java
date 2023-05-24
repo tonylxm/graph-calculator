@@ -96,8 +96,8 @@ public class Graph<T extends Comparable<T>> {
     for (Edge<T> edge1 : edges) {
       for (Edge<T> edge2 : EdgesWithSameSourceVertice(edge1.getDestination())) {
         for (Edge<T> edge3 : EdgesWithSameSourceVertice(edge1.getSource())) {
-          // if a -> b and b -> c then a -> c must exist for the graph to be transitive
-          if ((edge3.getDestination() == edge2.getDestination())) {
+          // if a -> b and b -> c then a -> c must exist for this relation to be transitive
+          if (edge3.getDestination() == edge2.getDestination()) {
             check = 1;
             break;
           } else {
@@ -124,16 +124,32 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isAntiSymmetric() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    // '==' rather than '.equals()' as we want the same reference of same object, not just same node
+    // number
+
+    for (Edge<T> edge1 : edges) {
+      for (Edge<T> edge2 : EdgesWithSameSourceVertice(edge1.getDestination())) {
+        // if a -> b and b -> c then a == c for this relation to be antisymmetric
+        if (edge2.getDestination() == edge1.getSource()) {
+          // Self-loops allowed (self-loop if edge1 and edge2 are the same edge)
+          if (!(edge1 == edge2)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   public boolean isEquivalence() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    if (isReflexive() && isSymmetric() && isTransitive()) {
+      return true;
+    }
+    return false;
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
+    // helper methods for reflexive, symmetric and transitive, check for each
     // TODO: Task 1.
     throw new UnsupportedOperationException();
   }
