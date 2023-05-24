@@ -88,29 +88,39 @@ public class Graph<T extends Comparable<T>> {
     return false;
   }
 
-  // helper
-  public Set<T> SetOfAllSourceVertices() {
-    Set<T> allSourceVertices = new HashSet<T>();
-
-    for (Edge<T> edge : edges) {
-      allSourceVertices.add(edge.getSource());
-    }
-    return allSourceVertices;
-  }
-
-  // helper
-  public Set<T> SetOfAllDestinationVertices() {
-    Set<T> allDestinationVertices = new HashSet<T>();
-
-    for (Edge<T> edge : edges) {
-      allDestinationVertices.add(edge.getDestination());
-    }
-    return allDestinationVertices;
-  }
-
   public boolean isTransitive() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    // check = 0 means transitive relation is NOT found
+    // check = 1 means transitive relation is found
+    int check = 0;
+
+    for (Edge<T> edge1 : edges) {
+      for (Edge<T> edge2 : EdgesWithSameSourceVertice(edge1.getDestination())) {
+        for (Edge<T> edge3 : EdgesWithSameSourceVertice(edge1.getSource())) {
+          // if a -> b and b -> c then a -> c must exist for the graph to be transitive
+          if ((edge3.getDestination() == edge2.getDestination())) {
+            check = 1;
+            break;
+          } else {
+            check = 0;
+          }
+        }
+        // if a -> c (transitive relation) is not found, then the whole graph is not transitive
+        if (check != 1) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // helper
+  public Set<Edge<T>> EdgesWithSameSourceVertice(T vertice) {
+    Set<Edge<T>> EdgesWithSameSourceVertice = new HashSet<Edge<T>>();
+
+    for (Edge<T> edge : edges) {
+      if (edge.getSource() == vertice) EdgesWithSameSourceVertice.add(edge);
+    }
+    return EdgesWithSameSourceVertice;
   }
 
   public boolean isAntiSymmetric() {
