@@ -51,24 +51,61 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isReflexive() {
-    Set<T> setOfVertices = new HashSet<T>();
+    Set<T> reflexiveVertices = new HashSet<T>();
 
+    // If there is a reflexive relation, add that vertice to reflexiveVertices .
     for (Edge<T> edge : edges) {
       if (edge.getSource() == edge.getDestination()) {
-        setOfVertices.add(edge.getDestination());
+        reflexiveVertices.add(edge.getDestination());
       }
     }
 
-    // if all vertices have a reflexive relation, the whole graph is reflexive
-    if (setOfVertices.containsAll(verticies)) {
+    // if reflexiveVertices contain all vertices, the whole graph is reflexive
+    if (reflexiveVertices.containsAll(verticies)) {
       return true;
     }
     return false;
   }
 
   public boolean isSymmetric() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    // check counts the amount of symmetric relations
+    int check = 0;
+
+    for (Edge<T> edge1 : edges) {
+      for (Edge<T> edge2 : edges) {
+        if (edge1.getSource() == edge2.getDestination()
+            && edge2.getSource() == edge1.getDestination()) {
+          check += 1;
+          break;
+        }
+      }
+    }
+
+    // if all edges have a symmetric pair, then the graph is symmetric
+    if (check == edges.size()) {
+      return true;
+    }
+    return false;
+  }
+
+  // helper
+  public Set<T> SetOfAllSourceVertices() {
+    Set<T> allSourceVertices = new HashSet<T>();
+
+    for (Edge<T> edge : edges) {
+      allSourceVertices.add(edge.getSource());
+    }
+    return allSourceVertices;
+  }
+
+  // helper
+  public Set<T> SetOfAllDestinationVertices() {
+    Set<T> allDestinationVertices = new HashSet<T>();
+
+    for (Edge<T> edge : edges) {
+      allDestinationVertices.add(edge.getDestination());
+    }
+    return allDestinationVertices;
   }
 
   public boolean isTransitive() {
