@@ -1,5 +1,6 @@
 // 0, 1, 2, 3
 // antisymmetry testing
+// isAntiSymmetric() returns true
 digraph testgraph {
  0 -> 0;
  0 -> 1;

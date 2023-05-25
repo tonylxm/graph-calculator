@@ -27,24 +27,24 @@ public class Graph<T extends Comparable<T>> {
 
   public Set<T> getRoots() {
     // Set of rootVertices is a subset of vertices of a graph
-    Set<T> rootVertices = verticies;
-    Set<T> equivalenceClassSet = new HashSet<>();
+    Set<T> rootVertices = new HashSet<T>();
+    Set<T> equivalenceClass = new HashSet<T>();
 
-    // Check if there are no incoming edges to the node
-    // i.e. the node is a not a destination of any edge, then it is a root vertice
-    // UNLESS it is a isolated node with a self-loop
-    for (Edge<T> edge : edges) {
-      if (rootVertices.contains(edge.getDestination())) {
-        rootVertices.remove(edge.getDestination()); // remove the non-root vertice from the set
+    // Compare SetOfAllDestinationVertices with verticies -> intersection are root nodes
+    // UNLESS it is a isolated node with a self-loop?
+    for (T vertex : verticies) {
+      // If the node is a not a destination of any edge, then it is a root vertice
+      if (!SetOfAllDestinationVertices().contains(vertex)) {
+        rootVertices.add(vertex);
       }
     }
 
-    // If the vertice is part of an equivalence class, it is a root vertice. If there are
+    // If the vertex is part of an equivalence class, it is a root vertice. If there are
     // multiple vertices in one equivalence class, return the minimum value
-    for (T vertice : verticies) {
-      equivalenceClassSet = getEquivalenceClass(vertice);
-      if (!equivalenceClassSet.isEmpty()) {
-        rootVertices.add(Collections.min(equivalenceClassSet)); // is this allowed?
+    for (T vertex : verticies) {
+      equivalenceClass = getEquivalenceClass(vertex);
+      if (!equivalenceClass.isEmpty()) {
+        rootVertices.add(Collections.min(equivalenceClass)); // is this allowed?
       }
     }
     return rootVertices;
@@ -94,8 +94,8 @@ public class Graph<T extends Comparable<T>> {
     int check = 0;
 
     for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : EdgesWithSameSourceVertice(edge1.getDestination())) {
-        for (Edge<T> edge3 : EdgesWithSameSourceVertice(edge1.getSource())) {
+      for (Edge<T> edge2 : EdgesWithSameSourceVertex(edge1.getDestination())) {
+        for (Edge<T> edge3 : EdgesWithSameSourceVertex(edge1.getSource())) {
           // if a -> b and b -> c then a -> c must exist for this relation to be transitive
           if (edge3.getDestination() == edge2.getDestination()) {
             check = 1;
@@ -113,23 +113,13 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
-  // helper
-  public Set<Edge<T>> EdgesWithSameSourceVertice(T vertice) {
-    Set<Edge<T>> EdgesWithSameSourceVertice = new HashSet<Edge<T>>();
-
-    for (Edge<T> edge : edges) {
-      if (edge.getSource() == vertice) EdgesWithSameSourceVertice.add(edge);
-    }
-    return EdgesWithSameSourceVertice;
-  }
-
   public boolean isAntiSymmetric() {
     // '==' rather than '.equals()' as we want the same reference of same object, not just same node
     // number
 
     for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : EdgesWithSameSourceVertice(edge1.getDestination())) {
-        // if a -> b and b -> c then a == c for this relation to be antisymmetric
+      for (Edge<T> edge2 : EdgesWithSameSourceVertex(edge1.getDestination())) {
+        // if a -> b and b -> c then c is a for this relation to be antisymmetric
         if (edge2.getDestination() == edge1.getSource()) {
           // Self-loops allowed (self-loop if edge1 and edge2 are the same edge)
           if (!(edge1 == edge2)) {
@@ -149,17 +139,29 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
-    // helper methods for reflexive, symmetric and transitive, check for each
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    Set<T> equivalenceClass = new HashSet<T>();
+
+    // Set needs to have an Equivalence relation to have equivalence classes
+    if (!isEquivalence()) {
+      return equivalenceClass;
+    } else {
+      // Reachbility to other vertices from input vertex
+      // FIX - BFS?
+      for (Edge<T> edge : EdgesWithSameSourceVertex(vertex)) {
+        equivalenceClass.add(edge.getDestination());
+      }
+      return equivalenceClass;
+    }
   }
 
   public List<T> iterativeBreadthFirstSearch() {
+    // BFS - queue
     // TODO: Task 2.
     throw new UnsupportedOperationException();
   }
 
   public List<T> iterativeDepthFirstSearch() {
+    // DFS - stack
     // TODO: Task 2.
     throw new UnsupportedOperationException();
   }
@@ -172,5 +174,25 @@ public class Graph<T extends Comparable<T>> {
   public List<T> recursiveDepthFirstSearch() {
     // TODO: Task 3.
     throw new UnsupportedOperationException();
+  }
+
+  // helper
+  public Set<T> SetOfAllDestinationVertices() {
+    Set<T> allDestinationVertices = new HashSet<T>();
+
+    for (Edge<T> edge : edges) {
+      allDestinationVertices.add(edge.getDestination());
+    }
+    return allDestinationVertices;
+  }
+
+  // helper
+  public Set<Edge<T>> EdgesWithSameSourceVertex(T vertex) {
+    Set<Edge<T>> EdgesWithSameSourceVertice = new HashSet<Edge<T>>();
+
+    for (Edge<T> edge : edges) {
+      if (edge.getSource().equals(vertex)) EdgesWithSameSourceVertice.add(edge);
+    }
+    return EdgesWithSameSourceVertice;
   }
 }

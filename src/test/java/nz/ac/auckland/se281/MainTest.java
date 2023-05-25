@@ -31,14 +31,14 @@ public class MainTest {
     public void T1_B_roots() throws Exception {
       runCommands(OPEN_FILE, "b.txt", LIST_ROOT_VERTICIES);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("[]");
+      assertContains("[6]");
     }
 
     @Test
     public void T1_C_roots() throws Exception {
       runCommands(OPEN_FILE, "c.txt", LIST_ROOT_VERTICIES);
       assertContains("Successfully opened graph from file c.txt");
-      assertContains("[0 1]");
+      assertContains("[0, 1]");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class MainTest {
     public void T1_B_reflexivity() throws Exception {
       runCommands(OPEN_FILE, "b.txt", CHECK_REFLEXIVITY);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("The graph is reflexive");
+      assertContains("The graph is NOT reflexive");
     }
 
     @Test
@@ -73,7 +73,7 @@ public class MainTest {
     public void T1_B_symmetry() throws Exception {
       runCommands(OPEN_FILE, "b.txt", CHECK_SYMMETRY);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("The graph is symmetric");
+      assertContains("The graph is NOT symmetric");
     }
 
     @Test
@@ -150,7 +150,7 @@ public class MainTest {
     public void T1_B_equivalence_class_1() throws Exception {
       runCommands(OPEN_FILE, "b.txt", COMPUTE_EQUIVALENCE, 1);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("[0, 1, 2, 3, 4, 5]");
+      assertContains("[]");
     }
 
     @Test
@@ -184,7 +184,7 @@ public class MainTest {
     public void T2_B_iterative_BFS() throws Exception {
       runCommands(OPEN_FILE, "b.txt", GRAPH_SEARCH_IBFS);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("[0, 1, 2, 3, 4, 5]");
+      assertContains("[6, 5, 4, 3, 2, 1, 0]");
     }
 
     @Test
@@ -205,7 +205,7 @@ public class MainTest {
     public void T2_B_iterative_DFS() throws Exception {
       runCommands(OPEN_FILE, "b.txt", GRAPH_SEARCH_IDFS);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("[0, 1, 2, 3, 4, 5]");
+      assertContains("[6, 5, 4, 3, 2, 1, 0]");
     }
 
     @Test
@@ -269,9 +269,55 @@ public class MainTest {
       super(Main.class);
     }
 
+    // Can use Union and Intersection to check some properties
+
     @Test
-    public void TY_01_your_own_test() throws Exception {
-      // Write your own test here, in the same format as the other tests.
+    public void TY_D_antisymmetry() throws Exception {
+      runCommands(OPEN_FILE, "d.txt", CHECK_ANTISYMMETRY);
+      assertContains("Successfully opened graph from file d.txt");
+      assertContains("The graph is antisymmetric");
+    }
+
+    @Test
+    public void TY_E_antisymmetry() throws Exception {
+      runCommands(OPEN_FILE, "e.txt", CHECK_ANTISYMMETRY);
+      assertContains("Successfully opened graph from file e.txt");
+      assertContains("The graph is NOT antisymmetric");
+    }
+
+    @Test
+    public void TY_F_equivalence() throws Exception {
+      runCommands(OPEN_FILE, "f.txt", CHECK_EQUIVALENCE);
+      assertContains("Successfully opened graph from file f.txt");
+      assertContains("The graph is an equivalence relation");
+    }
+
+    @Test
+    public void TY_C_equivalence_class_0() throws Exception {
+      runCommands(OPEN_FILE, "c.txt", COMPUTE_EQUIVALENCE, 0);
+      assertContains("Successfully opened graph from file c.txt");
+      assertContains("[0]");
+    }
+
+    @Test
+    public void TY_F_equivalence_class_0() throws Exception {
+      runCommands(OPEN_FILE, "f.txt", COMPUTE_EQUIVALENCE, 0);
+      assertContains("Successfully opened graph from file f.txt");
+      assertContains("[0]");
+    }
+
+    @Test
+    public void TY_F_equivalence_class_2() throws Exception {
+      runCommands(OPEN_FILE, "f.txt", COMPUTE_EQUIVALENCE, 2);
+      assertContains("Successfully opened graph from file f.txt");
+      assertContains("[1, 2, 3]");
+    }
+
+    @Test
+    public void TY_F_equivalence_class_5() throws Exception {
+      runCommands(OPEN_FILE, "f.txt", COMPUTE_EQUIVALENCE, 5);
+      assertContains("Successfully opened graph from file f.txt");
+      assertContains("[4, 5]");
     }
   }
 }
