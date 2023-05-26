@@ -4,4 +4,30 @@
 
 package nz.ac.auckland.se281.datastructures;
 
-public class Stack {}
+public class Stack<T> {
+  private LinkedList<T> stack;
+
+  public Stack() {
+    stack = new LinkedList<T>();
+  }
+
+  // Adds a new node to the top of the stack
+  public void push(T node) {
+    stack.prepend(node);
+  }
+
+  // Removes the node at the top of the stack
+  public void pop() {
+    stack.removeHead();
+  }
+
+  // Returns the value of the node at the top of the stack (without removing it)
+  public T peek() {
+    return stack.fetch();
+  }
+
+  // Returns the number of nodes in the stack
+  public int size() {
+    return stack.size();
+  }
+}

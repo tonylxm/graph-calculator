@@ -4,7 +4,9 @@
 
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,22 +19,39 @@ import java.util.Set;
  * @param <T> The type of each vertex, that have a total ordering.
  */
 public class Graph<T extends Comparable<T>> {
-  private Set<T> verticies;
-  private Set<Edge<T>> edges;
+  private final Set<T> verticies;
+  private final Set<Edge<T>> edges;
+  private HashMap<T, LinkedList<Edge<T>>> adjacencyMap;
+
+  // Node.java
+  // LinkedList.java
+  // NodeStackAndQueue.java
+  // Queue -> front and rear, delete from front, add to rear
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
     this.edges = edges;
+
+    // for (T vertex : verticies) {
+    //   adjacencyMap.put(vertex, );
+    // }
   }
 
   public Set<T> getRoots() {
+    LinkedList<T> l = new LinkedList<T>();
+
     // Set of rootVertices is a subset of vertices of a graph
     Set<T> rootVertices = new HashSet<T>();
     Set<T> equivalenceClass = new HashSet<T>();
 
+    for (T vertex : verticies) {
+      l.prepend(vertex);
+    }
+
     // Compare SetOfAllDestinationVertices with verticies -> intersection are root nodes
     // UNLESS it is a isolated node with a self-loop?
     for (T vertex : verticies) {
+      l.append(vertex);
       // If the node is a not a destination of any edge, then it is a root vertice
       if (!SetOfAllDestinationVertices().contains(vertex)) {
         rootVertices.add(vertex);
@@ -51,6 +70,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isReflexive() {
+    // NOT ALLOWED HashSet()
     Set<T> reflexiveVertices = new HashSet<T>();
 
     // If there is a reflexive relation, add that vertice to reflexiveVertices .
@@ -155,7 +175,20 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public List<T> iterativeBreadthFirstSearch() {
-    // BFS - queue
+    // BFS - queue FILO
+    // Start at root node
+    // root node(s) -> back of queue
+    // search depth 1: get source: queue[0] -> get destination nodes
+    // remove queue[0] from front -> add to visited
+    // destination nodes -> back of queue
+    // next search: source: queue.front (this is either 2nd root node or 1st depth 1 node) -> get
+    // destination nodes
+    // loop until all vertices visited
+
+    Set<T> roots = getRoots();
+    List<T> visited = new ArrayList<T>();
+    Queue<T> queue = new Queue<T>();
+
     // TODO: Task 2.
     throw new UnsupportedOperationException();
   }

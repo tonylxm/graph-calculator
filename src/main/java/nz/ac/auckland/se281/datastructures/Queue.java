@@ -4,4 +4,22 @@
 
 package nz.ac.auckland.se281.datastructures;
 
-public class Queue {}
+public class Queue<T> {
+  private LinkedList<T> queue;
+
+  public Queue() {
+    queue = new LinkedList<T>();
+  }
+
+  public void enqueue(T node) {
+    queue.append(node);
+  }
+
+  public T dequeue() {
+    return queue.removeHead();
+  }
+
+  public int size() {
+    return queue.size();
+  }
+}

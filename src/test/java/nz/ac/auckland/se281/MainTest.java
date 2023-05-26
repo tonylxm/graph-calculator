@@ -269,7 +269,8 @@ public class MainTest {
       super(Main.class);
     }
 
-    // Can use Union and Intersection to check some properties
+    // Can use Union and 
+    // Intersection to check some properties equivalence classes (empty or equal)
 
     @Test
     public void TY_D_antisymmetry() throws Exception {
