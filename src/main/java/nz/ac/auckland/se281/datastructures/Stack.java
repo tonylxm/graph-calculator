@@ -17,13 +17,10 @@ public class Stack<T> {
   }
 
   // Removes the node at the top of the stack
-  public void pop() {
+  public T pop() {
+    T poppedNode = stack.fetch();
     stack.removeHead();
-  }
-
-  // Returns the value of the node at the top of the stack (without removing it)
-  public T peek() {
-    return stack.fetch();
+    return poppedNode;
   }
 
   // Returns the number of nodes in the stack

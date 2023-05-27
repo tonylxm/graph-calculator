@@ -174,7 +174,7 @@ public class Graph<T extends Comparable<T>> {
 
     Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
-    List<T> sortedNodeAtCurrentDepth = new ArrayList<T>();
+    List<T> sortedNodesAtCurrentDepth = new ArrayList<T>();
     Queue<T> queue = new Queue<T>();
     T current;
 
@@ -186,18 +186,18 @@ public class Graph<T extends Comparable<T>> {
         current = queue.dequeue();
         for (Edge<T> neighbour : adjacencyMap.get(current)) {
           if (!visited.contains(neighbour.getDestination())) {
-            sortedNodeAtCurrentDepth.add(neighbour.getDestination());
+            sortedNodesAtCurrentDepth.add(neighbour.getDestination());
           }
         }
         // Nodes at the same search depth should be visited in numerical order
-        Collections.sort(sortedNodeAtCurrentDepth);
-        visited.addAll(sortedNodeAtCurrentDepth);
+        Collections.sort(sortedNodesAtCurrentDepth);
+        visited.addAll(sortedNodesAtCurrentDepth);
 
         // queue the sorted nodes at the same search depth
-        for (T node : sortedNodeAtCurrentDepth) {
+        for (T node : sortedNodesAtCurrentDepth) {
           queue.enqueue(node);
         }
-        sortedNodeAtCurrentDepth.clear();
+        sortedNodesAtCurrentDepth.clear();
       }
     }
     return visited;
@@ -205,8 +205,36 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeDepthFirstSearch() {
     // DFS - stack
-    // TODO: Task 2.
-    throw new UnsupportedOperationException();
+    Set<T> roots = getRoots();
+    List<T> visited = new ArrayList<T>();
+    List<T> sortedNodesAtCurrentDepth = new ArrayList<T>();
+    Stack<T> stack = new Stack<T>();
+    T current;
+
+    for (T root : roots) {
+      stack.push(root);
+
+      while (!stack.isEmpty()) {
+        current = stack.pop();
+        if (!visited.contains(current)) {
+          visited.add(current);
+          for (Edge<T> neighbour : adjacencyMap.get(current)) {
+            sortedNodesAtCurrentDepth.add(neighbour.getDestination());
+          }
+          // Nodes at the same search depth should be visited in numerical order, but need to
+          // reverse for the nature of the stack data structure
+          Collections.sort(sortedNodesAtCurrentDepth);
+          Collections.reverse(sortedNodesAtCurrentDepth);
+
+          // stack the sorted nodes at the same search depth
+          for (T node : sortedNodesAtCurrentDepth) {
+            stack.push(node);
+          }
+          sortedNodesAtCurrentDepth.clear();
+        }
+      }
+    }
+    return visited;
   }
 
   public List<T> recursiveBreadthFirstSearch() {
