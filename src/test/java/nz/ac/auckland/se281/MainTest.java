@@ -10,9 +10,9 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
   MainTest.Task1.class,
-  // MainTest.Task2.class, // Uncomment this line when you start Task 2
+  MainTest.Task2.class, // Uncomment this line when you start Task 2
   // MainTest.Task3.class, // Uncomment this line when you start Task 3
-  // MainTest.YourTests.class, // Uncomment this line to run your own tests
+  MainTest.YourTests.class, // Uncomment this line to run your own tests
 })
 public class MainTest {
   public static class Task1 extends CliTest {
@@ -269,7 +269,7 @@ public class MainTest {
       super(Main.class);
     }
 
-    // Can use Union and 
+    // Can use Union and
     // Intersection to check some properties equivalence classes (empty or equal)
 
     @Test
@@ -319,6 +319,13 @@ public class MainTest {
       runCommands(OPEN_FILE, "f.txt", COMPUTE_EQUIVALENCE, 5);
       assertContains("Successfully opened graph from file f.txt");
       assertContains("[4, 5]");
+    }
+
+    @Test
+    public void TY_G_iterative_BFS() throws Exception {
+      runCommands(OPEN_FILE, "g.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file g.txt");
+      assertContains("[1, 2, 3, 4, 8, 9, 5, 6, 7]");
     }
   }
 }

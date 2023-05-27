@@ -30,4 +30,9 @@ public class Stack<T> {
   public int size() {
     return stack.size();
   }
+
+  public boolean isEmpty() {
+    if (stack.size() == 0) return true;
+    else return false;
+  }
 }

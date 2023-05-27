@@ -4,8 +4,6 @@ public class Node<T> {
   private T value;
   private Node<T> next;
 
-  public Node() {}
-
   public Node(T vertex) {
     value = vertex;
     next = null;

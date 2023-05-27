@@ -22,4 +22,9 @@ public class Queue<T> {
   public int size() {
     return queue.size();
   }
+
+  public boolean isEmpty() {
+    if (queue.size() == 0) return true;
+    else return false;
+  }
 }

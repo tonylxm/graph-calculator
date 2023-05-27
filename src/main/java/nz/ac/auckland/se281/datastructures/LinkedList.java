@@ -36,9 +36,10 @@ public class LinkedList<T> {
   }
 
   public T removeHead() {
+    T removedHeadValue = head.getValue();
     head = head.getNext();
     count--;
-    return head.getValue();
+    return removedHeadValue;
   }
 
   public int size() {

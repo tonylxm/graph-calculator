@@ -21,37 +21,31 @@ import java.util.Set;
 public class Graph<T extends Comparable<T>> {
   private final Set<T> verticies;
   private final Set<Edge<T>> edges;
-  private HashMap<T, LinkedList<Edge<T>>> adjacencyMap;
+  private HashMap<T, Set<Edge<T>>> adjacencyMap;
 
-  // Node.java
-  // LinkedList.java
-  // NodeStackAndQueue.java
-  // Queue -> front and rear, delete from front, add to rear
+  // private HashMap<T, LinkedList<T>> adjacencyMap;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
     this.edges = edges;
+    adjacencyMap = new HashMap<>();
 
-    // for (T vertex : verticies) {
-    //   adjacencyMap.put(vertex, );
-    // }
+    // populate adjacencyMap with values
+    for (T vertex : verticies) {
+      Set<Edge<T>> EdgesWithSameSource = new HashSet<Edge<T>>();
+      EdgesWithSameSource = EdgesWithSameSourceVertex(vertex);
+      adjacencyMap.put(vertex, EdgesWithSameSource);
+    }
   }
 
   public Set<T> getRoots() {
-    LinkedList<T> l = new LinkedList<T>();
-
     // Set of rootVertices is a subset of vertices of a graph
     Set<T> rootVertices = new HashSet<T>();
     Set<T> equivalenceClass = new HashSet<T>();
 
-    for (T vertex : verticies) {
-      l.prepend(vertex);
-    }
-
     // Compare SetOfAllDestinationVertices with verticies -> intersection are root nodes
     // UNLESS it is a isolated node with a self-loop?
     for (T vertex : verticies) {
-      l.append(vertex);
       // If the node is a not a destination of any edge, then it is a root vertice
       if (!SetOfAllDestinationVertices().contains(vertex)) {
         rootVertices.add(vertex);
@@ -63,7 +57,7 @@ public class Graph<T extends Comparable<T>> {
     for (T vertex : verticies) {
       equivalenceClass = getEquivalenceClass(vertex);
       if (!equivalenceClass.isEmpty()) {
-        rootVertices.add(Collections.min(equivalenceClass)); // is this allowed?
+        rootVertices.add(Collections.min(equivalenceClass));
       }
     }
     return rootVertices;
@@ -114,8 +108,8 @@ public class Graph<T extends Comparable<T>> {
     int check = 0;
 
     for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : EdgesWithSameSourceVertex(edge1.getDestination())) {
-        for (Edge<T> edge3 : EdgesWithSameSourceVertex(edge1.getSource())) {
+      for (Edge<T> edge2 : adjacencyMap.get(edge1.getDestination())) {
+        for (Edge<T> edge3 : adjacencyMap.get(edge1.getSource())) {
           // if a -> b and b -> c then a -> c must exist for this relation to be transitive
           if (edge3.getDestination() == edge2.getDestination()) {
             check = 1;
@@ -134,11 +128,12 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isAntiSymmetric() {
-    // '==' rather than '.equals()' as we want the same reference of same object, not just same node
+    // '==' rather than '.equals()' as we want the same reference of same object, not just same
+    // node?
     // number
 
     for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : EdgesWithSameSourceVertex(edge1.getDestination())) {
+      for (Edge<T> edge2 : adjacencyMap.get(edge1.getDestination())) {
         // if a -> b and b -> c then c is a for this relation to be antisymmetric
         if (edge2.getDestination() == edge1.getSource()) {
           // Self-loops allowed (self-loop if edge1 and edge2 are the same edge)
@@ -167,7 +162,7 @@ public class Graph<T extends Comparable<T>> {
     } else {
       // Reachbility to other vertices from input vertex
       // FIX - BFS?
-      for (Edge<T> edge : EdgesWithSameSourceVertex(vertex)) {
+      for (Edge<T> edge : adjacencyMap.get(vertex)) {
         equivalenceClass.add(edge.getDestination());
       }
       return equivalenceClass;
@@ -176,21 +171,36 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeBreadthFirstSearch() {
     // BFS - queue FILO
-    // Start at root node
-    // root node(s) -> back of queue
-    // search depth 1: get source: queue[0] -> get destination nodes
-    // remove queue[0] from front -> add to visited
-    // destination nodes -> back of queue
-    // next search: source: queue.front (this is either 2nd root node or 1st depth 1 node) -> get
-    // destination nodes
-    // loop until all vertices visited
 
     Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
+    List<T> sortedNodeAtCurrentDepth = new ArrayList<T>();
     Queue<T> queue = new Queue<T>();
+    T current;
 
-    // TODO: Task 2.
-    throw new UnsupportedOperationException();
+    for (T root : roots) {
+      queue.enqueue(root);
+      visited.add(root);
+
+      while (!queue.isEmpty()) {
+        current = queue.dequeue();
+        for (Edge<T> neighbour : adjacencyMap.get(current)) {
+          if (!visited.contains(neighbour.getDestination())) {
+            sortedNodeAtCurrentDepth.add(neighbour.getDestination());
+          }
+        }
+        // Nodes at the same search depth should be visited in numerical order
+        Collections.sort(sortedNodeAtCurrentDepth);
+        visited.addAll(sortedNodeAtCurrentDepth);
+
+        // queue the sorted nodes at the same search depth
+        for (T node : sortedNodeAtCurrentDepth) {
+          queue.enqueue(node);
+        }
+        sortedNodeAtCurrentDepth.clear();
+      }
+    }
+    return visited;
   }
 
   public List<T> iterativeDepthFirstSearch() {
@@ -219,13 +229,12 @@ public class Graph<T extends Comparable<T>> {
     return allDestinationVertices;
   }
 
-  // helper
   public Set<Edge<T>> EdgesWithSameSourceVertex(T vertex) {
-    Set<Edge<T>> EdgesWithSameSourceVertice = new HashSet<Edge<T>>();
+    Set<Edge<T>> EdgesWithSameSourceVertex = new HashSet<Edge<T>>();
 
     for (Edge<T> edge : edges) {
-      if (edge.getSource().equals(vertex)) EdgesWithSameSourceVertice.add(edge);
+      if (edge.getSource().equals(vertex)) EdgesWithSameSourceVertex.add(edge);
     }
-    return EdgesWithSameSourceVertice;
+    return EdgesWithSameSourceVertex;
   }
 }
