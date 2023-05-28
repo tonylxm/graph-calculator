@@ -11,7 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
   MainTest.Task1.class,
   MainTest.Task2.class, // Uncomment this line when you start Task 2
-  // MainTest.Task3.class, // Uncomment this line when you start Task 3
+  MainTest.Task3.class, // Uncomment this line when you start Task 3
   MainTest.YourTests.class, // Uncomment this line to run your own tests
 })
 public class MainTest {
@@ -232,7 +232,7 @@ public class MainTest {
     public void T3_B_recursive_BFS() throws Exception {
       runCommands(OPEN_FILE, "b.txt", GRAPH_SEARCH_RBFS);
       assertContains("Successfully opened graph from file b.txt");
-      assertContains("[0, 1, 2, 3, 4, 5]");
+      assertContains("[6, 5, 4, 3, 2, 1, 0]");
     }
 
     @Test

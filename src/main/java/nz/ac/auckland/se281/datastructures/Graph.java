@@ -238,50 +238,39 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public List<T> recursiveBreadthFirstSearch() {
-    // Define BFS
-    // search for neighbouring nodes
-    // if !visited, add to nodesAtCurrentDepth, sort, add to queue
-
-    // if Base case
-    //  then ...
-    // else
-    // recursively call BFS
-
     Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
     Queue<T> queue = new Queue<T>();
-    T current;
 
     for (T root : roots) {
       queue.enqueue(root);
       visited.add(root);
-
-      if (queue.isEmpty()) {
-        return visited;
-      } else {
-        current = queue.dequeue();
-        visited.addAll(rBfs(current, visited, queue));
-      }
+      rBfs(root, queue, visited);
     }
     return visited;
   }
 
-  public List<T> rBfs(T vertex, List<T> visited, Queue<T> queue) {
+  public void rBfs(T vertex, Queue<T> queue, List<T> visited) {
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
+    T current;
 
-    for (Edge<T> neighbour : adjacencyMap.get(vertex)) {
-      if (!visited.contains(neighbour.getDestination())) {
-        nodesAtCurrentDepth.add(neighbour.getDestination());
+    while (!queue.isEmpty()) {
+      current = queue.dequeue();
+      for (Edge<T> neighbour : adjacencyMap.get(current)) {
+        if (!visited.contains(neighbour.getDestination())) {
+          nodesAtCurrentDepth.add(neighbour.getDestination());
+        }
+      }
+      // Nodes at the same search depth should be visited in numerical order
+      Collections.sort(nodesAtCurrentDepth);
+      visited.addAll(nodesAtCurrentDepth);
+
+      // queue the sorted nodes at the same search depth
+      for (T node : nodesAtCurrentDepth) {
+        queue.enqueue(node);
+        rBfs(node, queue, visited);
       }
     }
-    // Nodes at the same search depth should be visited in numerical order
-    Collections.sort(nodesAtCurrentDepth);
-
-    // queue the sorted nodes at the same search depth
-    for (T node : nodesAtCurrentDepth) {
-      queue.enqueue(node);
-    }
-    return rBfs(vertex, nodesAtCurrentDepth, queue);
   }
 
   public List<T> recursiveDepthFirstSearch() {
