@@ -21,7 +21,7 @@ import java.util.Set;
 public class Graph<T extends Comparable<T>> {
   private final Set<T> verticies;
   private final Set<Edge<T>> edges;
-  private HashMap<T, Set<Edge<T>>> adjacencyMap;
+  private HashMap<T, Set<T>> adjacencyMap;
 
   // private HashMap<T, LinkedList<T>> adjacencyMap;
 
@@ -32,7 +32,7 @@ public class Graph<T extends Comparable<T>> {
 
     // populate adjacencyMap with values
     for (T vertex : verticies) {
-      Set<Edge<T>> EdgesWithSameSource = new HashSet<Edge<T>>();
+      Set<T> EdgesWithSameSource = new HashSet<T>();
       EdgesWithSameSource = EdgesWithSameSourceVertex(vertex);
       adjacencyMap.put(vertex, EdgesWithSameSource);
     }
@@ -65,20 +65,14 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isReflexive() {
     // NOT ALLOWED HashSet()
-    Set<T> reflexiveVertices = new HashSet<T>();
 
-    // If there is a reflexive relation, add that vertice to reflexiveVertices .
-    for (Edge<T> edge : edges) {
-      if (edge.getSource() == edge.getDestination()) {
-        reflexiveVertices.add(edge.getDestination());
+    // If there is a reflexive relation, add that vertice to reflexiveVertices..
+    for (T vertex : verticies) {
+      if (!adjacencyMap.get(vertex).contains(vertex)) {
+        return false;
       }
     }
-
-    // if reflexiveVertices contain all vertices, the whole graph is reflexive
-    if (reflexiveVertices.containsAll(verticies)) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   public boolean isSymmetric() {
@@ -107,11 +101,11 @@ public class Graph<T extends Comparable<T>> {
     // check = 1 means transitive relation is found
     int check = 0;
 
-    for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : adjacencyMap.get(edge1.getDestination())) {
-        for (Edge<T> edge3 : adjacencyMap.get(edge1.getSource())) {
+    for (T vertex1 : verticies) {
+      for (T vertex2 : adjacencyMap.get(vertex1)) {
+        for (T vertex3 : adjacencyMap.get(vertex2)) {
           // if a -> b and b -> c then a -> c must exist for this relation to be transitive
-          if (edge3.getDestination() == edge2.getDestination()) {
+          if (vertex3 == vertex1) {
             check = 1;
             break;
           } else {
@@ -132,15 +126,17 @@ public class Graph<T extends Comparable<T>> {
     // node?
     // number
 
-    for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : adjacencyMap.get(edge1.getDestination())) {
-        // if a -> b and b -> c then c is a for this relation to be antisymmetric
-        if (edge2.getDestination() == edge1.getSource()) {
-          // Self-loops allowed (self-loop if edge1 and edge2 are the same edge)
-          if (!(edge1 == edge2)) {
-            return false;
+    for (T vertex1 : verticies) {
+      for (T vertex2 : adjacencyMap.get(vertex1)) {
+        for (T vertex3 : adjacencyMap.get(vertex2))
+          // if a -> b and b -> c then c is a for this relation to be antisymmetric
+          if (vertex3 == vertex1) {
+            // Self-loops allowed (self-loop if vertex1 and vertex2 (destinations of edges leaving
+            // vertex1 are the same vertex)
+            if (vertex1 != vertex2) {
+              return false;
+            }
           }
-        }
       }
     }
     return true;
@@ -160,10 +156,8 @@ public class Graph<T extends Comparable<T>> {
     if (!isEquivalence()) {
       return equivalenceClass;
     } else {
-      // Reachbility to other vertices from input vertex
-      // FIX - BFS?
-      for (Edge<T> edge : adjacencyMap.get(vertex)) {
-        equivalenceClass.add(edge.getDestination());
+      for (T destination : adjacencyMap.get(vertex)) {
+        equivalenceClass.add(destination);
       }
       return equivalenceClass;
     }
@@ -178,15 +172,17 @@ public class Graph<T extends Comparable<T>> {
     Queue<T> queue = new Queue<T>();
     T current;
 
+    // if getRoots().isEmpty... -> min value?
+
     for (T root : roots) {
       queue.enqueue(root);
       visited.add(root);
 
       while (!queue.isEmpty()) {
         current = queue.dequeue();
-        for (Edge<T> neighbour : adjacencyMap.get(current)) {
-          if (!visited.contains(neighbour.getDestination())) {
-            nodesAtCurrentDepth.add(neighbour.getDestination());
+        for (T neighbour : adjacencyMap.get(current)) {
+          if (!visited.contains(neighbour)) {
+            nodesAtCurrentDepth.add(neighbour);
           }
         }
         // Nodes at the same search depth should be visited in numerical order
@@ -218,8 +214,8 @@ public class Graph<T extends Comparable<T>> {
         current = stack.pop();
         if (!visited.contains(current)) {
           visited.add(current);
-          for (Edge<T> neighbour : adjacencyMap.get(current)) {
-            nodesAtCurrentDepth.add(neighbour.getDestination());
+          for (T neighbour : adjacencyMap.get(current)) {
+            nodesAtCurrentDepth.add(neighbour);
           }
           // Nodes at the same search depth should be visited in numerical order, but need to
           // reverse for the nature of the stack data structure
@@ -256,9 +252,9 @@ public class Graph<T extends Comparable<T>> {
 
     while (!queue.isEmpty()) {
       current = queue.dequeue();
-      for (Edge<T> neighbour : adjacencyMap.get(current)) {
-        if (!visited.contains(neighbour.getDestination())) {
-          nodesAtCurrentDepth.add(neighbour.getDestination());
+      for (T neighbour : adjacencyMap.get(current)) {
+        if (!visited.contains(neighbour)) {
+          nodesAtCurrentDepth.add(neighbour);
         }
       }
       // Nodes at the same search depth should be visited in numerical order
@@ -293,8 +289,8 @@ public class Graph<T extends Comparable<T>> {
       current = stack.pop();
       if (!visited.contains(current)) {
         visited.add(current);
-        for (Edge<T> neighbour : adjacencyMap.get(current)) {
-          nodesAtCurrentDepth.add(neighbour.getDestination());
+        for (T neighbour : adjacencyMap.get(current)) {
+          nodesAtCurrentDepth.add(neighbour);
         }
         // Nodes at the same search depth should be visited in numerical order
         Collections.sort(nodesAtCurrentDepth);
@@ -320,11 +316,11 @@ public class Graph<T extends Comparable<T>> {
     return allDestinationVertices;
   }
 
-  public Set<Edge<T>> EdgesWithSameSourceVertex(T vertex) {
-    Set<Edge<T>> EdgesWithSameSourceVertex = new HashSet<Edge<T>>();
+  public Set<T> EdgesWithSameSourceVertex(T vertex) {
+    Set<T> EdgesWithSameSourceVertex = new HashSet<T>();
 
     for (Edge<T> edge : edges) {
-      if (edge.getSource().equals(vertex)) EdgesWithSameSourceVertex.add(edge);
+      if (edge.getSource().equals(vertex)) EdgesWithSameSourceVertex.add(edge.getDestination());
     }
     return EdgesWithSameSourceVertex;
   }
