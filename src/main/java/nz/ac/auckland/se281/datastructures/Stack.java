@@ -29,7 +29,10 @@ public class Stack<T> {
   }
 
   public boolean isEmpty() {
-    if (stack.size() == 0) return true;
-    else return false;
+    if (stack.size() == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

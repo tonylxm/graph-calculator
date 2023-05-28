@@ -23,7 +23,4 @@ public class Edge<T> {
   public T getDestination() {
     return destination;
   }
-
-  // @Override
-  // public boolean equals(Object obj) {}
 }

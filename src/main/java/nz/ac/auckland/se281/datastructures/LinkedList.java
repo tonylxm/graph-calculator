@@ -5,8 +5,6 @@ public class LinkedList<T> {
   protected Node<T> tail;
   protected int count;
 
-  public LinkedList() {}
-
   public void prepend(T value) {
     Node<T> newNode = new Node<T>(value);
     if (head == null) {

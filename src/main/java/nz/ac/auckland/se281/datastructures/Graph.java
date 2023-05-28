@@ -23,8 +23,6 @@ public class Graph<T extends Comparable<T>> {
   private final Set<Edge<T>> edges;
   private HashMap<T, Set<T>> adjacencyMap;
 
-  // private HashMap<T, LinkedList<T>> adjacencyMap;
-
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
     this.edges = edges;
@@ -32,9 +30,9 @@ public class Graph<T extends Comparable<T>> {
 
     // populate adjacencyMap with values
     for (T vertex : verticies) {
-      Set<T> EdgesWithSameSource = new HashSet<T>();
-      EdgesWithSameSource = EdgesWithSameSourceVertex(vertex);
-      adjacencyMap.put(vertex, EdgesWithSameSource);
+      Set<T> destinationsWithSameSource = new HashSet<T>();
+      destinationsWithSameSource = DestinationsWithSameSourceVertex(vertex);
+      adjacencyMap.put(vertex, destinationsWithSameSource);
     }
   }
 
@@ -241,12 +239,12 @@ public class Graph<T extends Comparable<T>> {
     for (T root : roots) {
       queue.enqueue(root);
       visited.add(root);
-      rBfs(root, queue, visited);
+      recursiveBfs(root, queue, visited);
     }
     return visited;
   }
 
-  public void rBfs(T vertex, Queue<T> queue, List<T> visited) {
+  public void recursiveBfs(T vertex, Queue<T> queue, List<T> visited) {
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
     T current;
 
@@ -264,7 +262,7 @@ public class Graph<T extends Comparable<T>> {
       // queue the sorted nodes at the same search depth
       for (T node : nodesAtCurrentDepth) {
         queue.enqueue(node);
-        rBfs(node, queue, visited);
+        recursiveBfs(node, queue, visited);
       }
     }
   }
@@ -276,12 +274,12 @@ public class Graph<T extends Comparable<T>> {
 
     for (T root : roots) {
       stack.push(root);
-      rDfs(root, stack, visited);
+      recursiveDfs(root, stack, visited);
     }
     return visited;
   }
 
-  public void rDfs(T vertex, Stack<T> stack, List<T> visited) {
+  public void recursiveDfs(T vertex, Stack<T> stack, List<T> visited) {
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
     T current;
 
@@ -299,7 +297,7 @@ public class Graph<T extends Comparable<T>> {
         for (T node : nodesAtCurrentDepth) {
           stack.push(node);
           if (!visited.contains(node)) {
-            rDfs(node, stack, visited);
+            recursiveDfs(node, stack, visited);
           }
         }
       }
@@ -316,12 +314,14 @@ public class Graph<T extends Comparable<T>> {
     return allDestinationVertices;
   }
 
-  public Set<T> EdgesWithSameSourceVertex(T vertex) {
-    Set<T> EdgesWithSameSourceVertex = new HashSet<T>();
+  public Set<T> DestinationsWithSameSourceVertex(T vertex) {
+    Set<T> destinationsWithSameSourceVertex = new HashSet<T>();
 
     for (Edge<T> edge : edges) {
-      if (edge.getSource().equals(vertex)) EdgesWithSameSourceVertex.add(edge.getDestination());
+      if (edge.getSource().equals(vertex)) {
+        destinationsWithSameSourceVertex.add(edge.getDestination());
+      }
     }
-    return EdgesWithSameSourceVertex;
+    return destinationsWithSameSourceVertex;
   }
 }
