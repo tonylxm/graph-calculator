@@ -6,7 +6,9 @@ public class LinkedList<T> {
   protected int count;
 
   /**
-   * @param value
+   * Create new node with value and add to the front of the LinkedList.
+   *
+   * @param value value to assign to new node
    */
   public void prepend(T value) {
     Node<T> newNode = new Node<T>(value);
@@ -21,7 +23,9 @@ public class LinkedList<T> {
   }
 
   /**
-   * @param value
+   * Create new node with value and add to the end of the LinkedList.
+   *
+   * @param value value to assign to new node
    */
   public void append(T value) {
     Node<T> newNode = new Node<T>(value);
@@ -36,14 +40,18 @@ public class LinkedList<T> {
   }
 
   /**
-   * @return T
+   * Fetch the value of the head node.
+   *
+   * @return T value of head node
    */
   public T fetch() {
     return head.getValue();
   }
 
   /**
-   * @return T
+   * Remove the head node from LinkedList.
+   *
+   * @return T value of head node
    */
   public T removeHead() {
     T removedHeadValue = head.getValue();
@@ -53,7 +61,9 @@ public class LinkedList<T> {
   }
 
   /**
-   * @return int
+   * Number of elements in LinkedList.
+   *
+   * @return int numbers of nodes in the LinkedList
    */
   public int size() {
     return count;

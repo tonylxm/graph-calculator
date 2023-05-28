@@ -10,13 +10,17 @@ public class Node<T> {
   }
 
   /**
-   * @param node node to set next in list
+   * Set the next node in the list.
+   *
+   * @param node node to set next
    */
   public void setNext(Node<T> node) {
     next = node;
   }
 
   /**
+   * Get the next node in the list.
+   *
    * @return Node<T> next node in list
    */
   public Node<T> getNext() {
@@ -24,6 +28,8 @@ public class Node<T> {
   }
 
   /**
+   * Get the value of the current node.
+   *
    * @return T value of current node
    */
   public T getValue() {

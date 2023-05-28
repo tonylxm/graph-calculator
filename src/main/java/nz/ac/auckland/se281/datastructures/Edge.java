@@ -16,10 +16,20 @@ public class Edge<T> {
     this.destination = destination;
   }
 
+  /**
+   * Gets the vertex the edge leaves from.
+   *
+   * @return T value of source vertex
+   */
   public T getSource() {
     return source;
   }
 
+  /**
+   * Gets the vertex the edge arrives at.
+   *
+   * @return T value of destination vertex
+   */
   public T getDestination() {
     return destination;
   }

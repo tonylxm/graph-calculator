@@ -34,6 +34,13 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
+  /**
+   * The roots of the graph are vertices that are not the destination of any edge (apart from
+   * self-loops). If the vertex is part of an equivalence class, it is a root vertice. If there are
+   * multiple vertices in one equivalence class, return the minimum value.
+   *
+   * @return Set<T> set of root vertices
+   */
   public Set<T> getRoots() {
     // Set of rootVertices is a subset of vertices of a graph
     Set<T> rootVertices = new HashSet<T>();
@@ -45,16 +52,14 @@ public class Graph<T extends Comparable<T>> {
     }
 
     // Compare setOfAllDestinationVertices with verticies -> intersection are root nodes
-    // UNLESS it is a isolated node with a self-loop?
     for (T vertex : verticies) {
-      // If the node is a not a destination of any edge, then it is a root vertice
+      // If the node is a not a destination of any edge, then it is a root vertex
+      // UNLESS it is a isolated node with a self-loop
       if (!setOfAllDestinationVertices.contains(vertex)) {
         rootVertices.add(vertex);
       }
     }
 
-    // If the vertex is part of an equivalence class, it is a root vertice. If there are
-    // multiple vertices in one equivalence class, return the minimum value
     for (T vertex : verticies) {
       if (!getEquivalenceClass(vertex).isEmpty()) {
         rootVertices.add(Collections.min(getEquivalenceClass(vertex)));
@@ -63,10 +68,13 @@ public class Graph<T extends Comparable<T>> {
     return rootVertices;
   }
 
+  /**
+   * For all vertices, vertex -> vertex (self-loop) must exist for this graph to be reflexive.
+   *
+   * @return boolean value - true if the graph is reflexive, false if not reflexive
+   */
   public boolean isReflexive() {
-    // NOT ALLOWED HashSet()
 
-    // If there is a reflexive relation, add that vertice to reflexiveVertices..
     for (T vertex : verticies) {
       if (!adjacencyMap.get(vertex).contains(vertex)) {
         return false;
@@ -75,45 +83,15 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  /**
+   * If vertex1 -> vertex2, then vertex2 -> vertex1 must exist for this graph to be symmetric.
+   *
+   * @return boolean value - true if the graph is symmetric, false if not symmetric
+   */
   public boolean isSymmetric() {
-    // check counts the amount of symmetric relations
-    int check = 0;
-
-    for (Edge<T> edge1 : edges) {
-      for (Edge<T> edge2 : edges) {
-        if (edge1.getSource() == edge2.getDestination()
-            && edge2.getSource() == edge1.getDestination()) {
-          check += 1;
-          break;
-        }
-      }
-    }
-
-    // if all edges have a symmetric pair, then the graph is symmetric
-    if (check == edges.size()) {
-      return true;
-    }
-    return false;
-  }
-
-  public boolean isTransitive() {
-    // check = 0 means transitive relation is NOT found
-    // check = 1 means transitive relation is found
-    int check = 0;
-
     for (T vertex1 : verticies) {
       for (T vertex2 : adjacencyMap.get(vertex1)) {
-        for (T vertex3 : adjacencyMap.get(vertex2)) {
-          // if a -> b and b -> c then a -> c must exist for this relation to be transitive
-          if (vertex3 == vertex1) {
-            check = 1;
-            break;
-          } else {
-            check = 0;
-          }
-        }
-        // if a -> c (transitive relation) is not found, then the whole graph is not transitive
-        if (check != 1) {
+        if (!adjacencyMap.get(vertex2).contains(vertex1)) {
           return false;
         }
       }
@@ -121,15 +99,35 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
-  public boolean isAntiSymmetric() {
-    // '==' rather than '.equals()' as we want the same reference of same object, not just same
-    // node?
-    // number
-
+  /**
+   * If vertex1 -> vertex2 and vertex2 -> vertex3 then vertex1 -> vertex3 must exist for this graph
+   * to be transitive.
+   *
+   * @return boolean value - true if the graph is transitive, false if not transitive
+   */
+  public boolean isTransitive() {
     for (T vertex1 : verticies) {
       for (T vertex2 : adjacencyMap.get(vertex1)) {
         for (T vertex3 : adjacencyMap.get(vertex2)) {
-          // if a -> b and b -> c then c is a for this relation to be antisymmetric
+          if (!adjacencyMap.get(vertex3).contains(vertex1)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * If vertex1 -> vertex2 and vertex2 -> vertex3 then vertex1 must equal vertex3 for this graph to
+   * be antisymmetric.
+   *
+   * @return boolean value - true if the graph is antisymmetric, false if not antisymmetric
+   */
+  public boolean isAntiSymmetric() {
+    for (T vertex1 : verticies) {
+      for (T vertex2 : adjacencyMap.get(vertex1)) {
+        for (T vertex3 : adjacencyMap.get(vertex2)) {
           if (vertex3 == vertex1) {
             // Self-loops allowed (self-loop if vertex1 and vertex2 (destinations of edges leaving
             // vertex1 are the same vertex)
@@ -143,6 +141,11 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  /**
+   * If the graph is reflexive, symmetric and transitive, then it is an equivalence relation.
+   *
+   * @return boolean value - true if the graph is equivalent , false if not equivalent
+   */
   public boolean isEquivalence() {
     if (isReflexive() && isSymmetric() && isTransitive()) {
       return true;
@@ -150,6 +153,12 @@ public class Graph<T extends Comparable<T>> {
     return false;
   }
 
+  /**
+   * An equivalence class of vertex1 is the set of all vertices that can be reached from vertex1.
+   *
+   * @param vertex vertex to get equivalence class for
+   * @return Set of vertices in the equivalence class
+   */
   public Set<T> getEquivalenceClass(T vertex) {
     Set<T> equivalenceClass = new HashSet<T>();
 
@@ -164,18 +173,19 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
+  /**
+   * Conducts a breadth first search iteratively on the graph. Visits all vertices at current depth
+   * before increasing search depth. Vertices at same depth are visited in numerical order.
+   *
+   * @return List of vertices in order of visited
+   */
   public List<T> iterativeBreadthFirstSearch() {
-    // BFS - queue FILO
-
-    Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
     Queue<T> queue = new Queue<T>();
     T current;
 
-    // if getRoots().isEmpty... -> min value?
-
-    for (T root : roots) {
+    for (T root : getRoots()) {
       queue.enqueue(root);
       visited.add(root);
 
@@ -200,15 +210,20 @@ public class Graph<T extends Comparable<T>> {
     return visited;
   }
 
+  /**
+   * Conducts a depth first search iteratively on the graph. Visits vertices giving priority to
+   * visit vertices with higher search depth first. Vertices at same depth are visited in numerical
+   * order.
+   *
+   * @return List of vertices in order of visited
+   */
   public List<T> iterativeDepthFirstSearch() {
-    // DFS - stack
-    Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
     Stack<T> stack = new Stack<T>();
     T current;
 
-    for (T root : roots) {
+    for (T root : getRoots()) {
       stack.push(root);
 
       while (!stack.isEmpty()) {
@@ -234,12 +249,17 @@ public class Graph<T extends Comparable<T>> {
     return visited;
   }
 
+  /**
+   * Calls the recursiveBfs function, starting the root vertex (if multiple roots, start at lowest
+   * numerical root and then subsequent subgraphs are searched sequentially).
+   *
+   * @return List of vertices in order of visited
+   */
   public List<T> recursiveBreadthFirstSearch() {
-    Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
     Queue<T> queue = new Queue<T>();
 
-    for (T root : roots) {
+    for (T root : getRoots()) {
       queue.enqueue(root);
       visited.add(root);
       recursiveBfs(root, queue, visited);
@@ -247,6 +267,10 @@ public class Graph<T extends Comparable<T>> {
     return visited;
   }
 
+  /**
+   * Conducts a breadth first search recursively on the graph. Visits all vertices at current depth
+   * before increasing search depth. Vertices at same depth are visited in numerical order.
+   */
   public void recursiveBfs(T vertex, Queue<T> queue, List<T> visited) {
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
     T current;
@@ -270,18 +294,28 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
+  /**
+   * Calls the recursiveDfs function, starting the root vertex (if multiple roots, start at lowest
+   * numerical root and then subsequent subgraphs are searched sequentially).
+   *
+   * @return List of vertices in order of visited
+   */
   public List<T> recursiveDepthFirstSearch() {
-    Set<T> roots = getRoots();
     List<T> visited = new ArrayList<T>();
     Stack<T> stack = new Stack<T>();
 
-    for (T root : roots) {
+    for (T root : getRoots()) {
       stack.push(root);
       recursiveDfs(root, stack, visited);
     }
     return visited;
   }
 
+  /**
+   * Conducts a depth first search iteratively on the graph. Visits vertices giving priority to
+   * visit vertices with higher search depth first. Vertices at same depth are visited in numerical
+   * order.
+   */
   public void recursiveDfs(T vertex, Stack<T> stack, List<T> visited) {
     List<T> nodesAtCurrentDepth = new ArrayList<T>();
     T current;
@@ -307,7 +341,13 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // helper
+  /**
+   * Iteratively goes through all edges and finds all destination vertices with the parameterised
+   * vertex as the source.
+   *
+   * @param vertex vertex to find neighbour vertices from
+   * @return Set of destination vertices of vertex in parameter
+   */
   public Set<T> destinationsWithSameSourceVertex(T vertex) {
     Set<T> destinationsWithSameSourceVertex = new HashSet<T>();
 
