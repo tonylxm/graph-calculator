@@ -1,12 +1,23 @@
+// AUTHOR: Tony Lim
+// DATE CREATED: 26/05/2023
+// LAST EDITED: 28/05/2023
+
 package nz.ac.auckland.se281.datastructures;
 
+/**
+ * LinkedList dynamic data structure, being used to implement both stack and queue. Is comprised of
+ * node that point to the next node for easy traversal, insertion and deletion.
+ *
+ * @param <T> The type of each vertex, that have a total ordering.
+ */
 public class LinkedList<T> {
   protected Node<T> head;
   protected Node<T> tail;
   protected int count;
 
   /**
-   * Create new node with value and add to the front of the LinkedList.
+   * Create new node with value and add to the front of the LinkedList. If it is the first node to
+   * be added, both head and tail pointers point to this node.
    *
    * @param value value to assign to new node
    */
@@ -23,7 +34,8 @@ public class LinkedList<T> {
   }
 
   /**
-   * Create new node with value and add to the end of the LinkedList.
+   * Create new node with value and add to the end of the LinkedList. If it is the first node to be
+   * added, both head and tail pointers point to this node.
    *
    * @param value value to assign to new node
    */

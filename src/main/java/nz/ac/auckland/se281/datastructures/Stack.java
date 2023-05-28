@@ -1,9 +1,14 @@
 // AUTHOR: Tony Lim
 // DATE CREATED: 25/05/2023
-// LAST EDITED: 25/05/2023
+// LAST EDITED: 28/05/2023
 
 package nz.ac.auckland.se281.datastructures;
 
+/**
+ * Stack linear data structure, where operations are performed in a First In Last Out (FILO) order.
+ *
+ * @param <T> The type of each vertex, that have a total ordering.
+ */
 public class Stack<T> {
   private LinkedList<T> stack;
 
@@ -32,9 +37,9 @@ public class Stack<T> {
   }
 
   /**
-   * Size of the stack.
+   * Calculates the current size of the stack.
    *
-   * @return int number of nodes in stack
+   * @return int number of elements in stack
    */
   public int size() {
     return stack.size();

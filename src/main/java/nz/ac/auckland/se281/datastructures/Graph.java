@@ -1,6 +1,6 @@
 // AUTHOR: Tony Lim
 // DATE CREATED: 19/05/2023
-// LAST EDITED: 24/05/2023
+// LAST EDITED: 28/05/2023
 
 package nz.ac.auckland.se281.datastructures;
 
@@ -39,7 +39,7 @@ public class Graph<T extends Comparable<T>> {
    * self-loops). If the vertex is part of an equivalence class, it is a root vertice. If there are
    * multiple vertices in one equivalence class, return the minimum value.
    *
-   * @return Set<T> set of root vertices
+   * @return set of root vertices
    */
   public Set<T> getRoots() {
     // Set of rootVertices is a subset of vertices of a graph
@@ -262,7 +262,7 @@ public class Graph<T extends Comparable<T>> {
     for (T root : getRoots()) {
       queue.enqueue(root);
       visited.add(root);
-      recursiveBfs(root, queue, visited);
+      recursiveBfs(root, queue, visited); // Call the recursive function
     }
     return visited;
   }
@@ -289,7 +289,7 @@ public class Graph<T extends Comparable<T>> {
       // queue the sorted nodes at the same search depth
       for (T node : nodesAtCurrentDepth) {
         queue.enqueue(node);
-        recursiveBfs(node, queue, visited);
+        recursiveBfs(node, queue, visited); // Call the recursive function
       }
     }
   }
@@ -306,7 +306,7 @@ public class Graph<T extends Comparable<T>> {
 
     for (T root : getRoots()) {
       stack.push(root);
-      recursiveDfs(root, stack, visited);
+      recursiveDfs(root, stack, visited); // Call the recursive function
     }
     return visited;
   }
@@ -334,7 +334,7 @@ public class Graph<T extends Comparable<T>> {
         for (T node : nodesAtCurrentDepth) {
           stack.push(node);
           if (!visited.contains(node)) {
-            recursiveDfs(node, stack, visited);
+            recursiveDfs(node, stack, visited); // Call the recursive function
           }
         }
       }
