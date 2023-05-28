@@ -12,25 +12,25 @@ public class Queue<T> {
   }
 
   /**
-   * Adds an element to the back of the queue
+   * Adds an element to the back of the queue.
    *
-   * @param node
+   * @param node node to add to queue
    */
   public void enqueue(T node) {
     queue.append(node);
   }
 
   /**
-   * Removes the element from the front of the queue
+   * Removes the element from the front of the queue.
    *
-   * @return T
+   * @return T value of head node
    */
   public T dequeue() {
     return queue.removeHead();
   }
 
   /**
-   * Size of queue
+   * Size of the queue.
    *
    * @return int number of elements in queue
    */
@@ -39,7 +39,7 @@ public class Queue<T> {
   }
 
   /**
-   * Check if queue is empty or not
+   * Check if queue is empty or not.
    *
    * @return boolean true if the queue is empty, false otherwise
    */

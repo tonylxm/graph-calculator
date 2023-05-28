@@ -12,7 +12,7 @@ public class Stack<T> {
   }
 
   /**
-   * Adds a new node to the top of the stack
+   * Adds a new node to the top of the stack.
    *
    * @param node node to add to stack
    */
@@ -21,7 +21,7 @@ public class Stack<T> {
   }
 
   /**
-   * Removes the node at the top of the stack
+   * Removes the node at the top of the stack.
    *
    * @return T node at top of stack
    */
@@ -32,7 +32,7 @@ public class Stack<T> {
   }
 
   /**
-   * Size of stack
+   * Size of the stack.
    *
    * @return int number of nodes in stack
    */
@@ -41,7 +41,7 @@ public class Stack<T> {
   }
 
   /**
-   * Check if stack is empty or not
+   * Check if stack is empty or not.
    *
    * @return boolean true if the stack is empty, false otherwise
    */
