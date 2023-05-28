@@ -16,13 +16,14 @@ public class LinkedList<T> {
   private int count;
 
   /**
-   * Create new node with value and add to the front of the LinkedList. If it is the first node to
-   * be added, both head and tail pointers point to this node.
+   * Create new node with value and add to the front of the LinkedList.
    *
    * @param value value to assign to new node
    */
   public void prepend(T value) {
     Node<T> newNode = new Node<T>(value);
+
+    // If it is the first node to be added, both head and tail pointers point to this node.
     if (head == null) {
       head = newNode;
       tail = newNode;
@@ -34,13 +35,14 @@ public class LinkedList<T> {
   }
 
   /**
-   * Create new node with value and add to the end of the LinkedList. If it is the first node to be
-   * added, both head and tail pointers point to this node.
+   * Create new node with value and add to the end of the LinkedList.
    *
    * @param value value to assign to new node
    */
   public void append(T value) {
     Node<T> newNode = new Node<T>(value);
+
+    // If it is the first node to be added, both head and tail pointers point to this node.
     if (head == null) {
       head = newNode;
       tail = newNode;

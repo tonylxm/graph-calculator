@@ -23,12 +23,19 @@ public class Graph<T extends Comparable<T>> {
   private final Set<Edge<T>> edges;
   private final HashMap<T, Set<T>> adjacencyMap;
 
+  /**
+   * Constructor method that initialises vertice and edge sets as well as populate adjacencyMap with
+   * key = vertex and value = set of all destination vertices that have the key vertex as the
+   * source.
+   *
+   * @param verticies Set of all vertices in graph
+   * @param edges Set of all edges in graph
+   */
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
     this.edges = edges;
     adjacencyMap = new HashMap<>();
 
-    // populate adjacencyMap with values
     for (T vertex : verticies) {
       adjacencyMap.put(vertex, destinationsWithSameSourceVertex(vertex));
     }
