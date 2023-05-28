@@ -30,22 +30,25 @@ public class Graph<T extends Comparable<T>> {
 
     // populate adjacencyMap with values
     for (T vertex : verticies) {
-      Set<T> destinationsWithSameSource = new HashSet<T>();
-      destinationsWithSameSource = DestinationsWithSameSourceVertex(vertex);
-      adjacencyMap.put(vertex, destinationsWithSameSource);
+      adjacencyMap.put(vertex, destinationsWithSameSourceVertex(vertex));
     }
   }
 
   public Set<T> getRoots() {
     // Set of rootVertices is a subset of vertices of a graph
     Set<T> rootVertices = new HashSet<T>();
-    Set<T> equivalenceClass = new HashSet<T>();
+    Set<T> setOfAllDestinationVertices = new HashSet<T>();
 
-    // Compare SetOfAllDestinationVertices with verticies -> intersection are root nodes
+    // Form setOfAllDestinationVertices
+    for (T vertex : verticies) {
+      setOfAllDestinationVertices.addAll(adjacencyMap.get(vertex));
+    }
+
+    // Compare setOfAllDestinationVertices with verticies -> intersection are root nodes
     // UNLESS it is a isolated node with a self-loop?
     for (T vertex : verticies) {
       // If the node is a not a destination of any edge, then it is a root vertice
-      if (!SetOfAllDestinationVertices().contains(vertex)) {
+      if (!setOfAllDestinationVertices.contains(vertex)) {
         rootVertices.add(vertex);
       }
     }
@@ -53,9 +56,8 @@ public class Graph<T extends Comparable<T>> {
     // If the vertex is part of an equivalence class, it is a root vertice. If there are
     // multiple vertices in one equivalence class, return the minimum value
     for (T vertex : verticies) {
-      equivalenceClass = getEquivalenceClass(vertex);
-      if (!equivalenceClass.isEmpty()) {
-        rootVertices.add(Collections.min(equivalenceClass));
+      if (!getEquivalenceClass(vertex).isEmpty()) {
+        rootVertices.add(Collections.min(getEquivalenceClass(vertex)));
       }
     }
     return rootVertices;
@@ -126,7 +128,7 @@ public class Graph<T extends Comparable<T>> {
 
     for (T vertex1 : verticies) {
       for (T vertex2 : adjacencyMap.get(vertex1)) {
-        for (T vertex3 : adjacencyMap.get(vertex2))
+        for (T vertex3 : adjacencyMap.get(vertex2)) {
           // if a -> b and b -> c then c is a for this relation to be antisymmetric
           if (vertex3 == vertex1) {
             // Self-loops allowed (self-loop if vertex1 and vertex2 (destinations of edges leaving
@@ -135,6 +137,7 @@ public class Graph<T extends Comparable<T>> {
               return false;
             }
           }
+        }
       }
     }
     return true;
@@ -305,16 +308,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // helper
-  public Set<T> SetOfAllDestinationVertices() {
-    Set<T> allDestinationVertices = new HashSet<T>();
-
-    for (Edge<T> edge : edges) {
-      allDestinationVertices.add(edge.getDestination());
-    }
-    return allDestinationVertices;
-  }
-
-  public Set<T> DestinationsWithSameSourceVertex(T vertex) {
+  public Set<T> destinationsWithSameSourceVertex(T vertex) {
     Set<T> destinationsWithSameSourceVertex = new HashSet<T>();
 
     for (Edge<T> edge : edges) {
