@@ -5,6 +5,9 @@ public class LinkedList<T> {
   protected Node<T> tail;
   protected int count;
 
+  /**
+   * @param value
+   */
   public void prepend(T value) {
     Node<T> newNode = new Node<T>(value);
     if (head == null) {
@@ -17,6 +20,9 @@ public class LinkedList<T> {
     count++;
   }
 
+  /**
+   * @param value
+   */
   public void append(T value) {
     Node<T> newNode = new Node<T>(value);
     if (head == null) {
@@ -29,10 +35,16 @@ public class LinkedList<T> {
     count++;
   }
 
+  /**
+   * @return T
+   */
   public T fetch() {
     return head.getValue();
   }
 
+  /**
+   * @return T
+   */
   public T removeHead() {
     T removedHeadValue = head.getValue();
     head = head.getNext();
@@ -40,6 +52,9 @@ public class LinkedList<T> {
     return removedHeadValue;
   }
 
+  /**
+   * @return int
+   */
   public int size() {
     return count;
   }

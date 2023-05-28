@@ -11,23 +11,40 @@ public class Stack<T> {
     stack = new LinkedList<T>();
   }
 
-  // Adds a new node to the top of the stack
+  /**
+   * Adds a new node to the top of the stack
+   *
+   * @param node node to add to stack
+   */
   public void push(T node) {
     stack.prepend(node);
   }
 
-  // Removes the node at the top of the stack
+  /**
+   * Removes the node at the top of the stack
+   *
+   * @return T node at top of stack
+   */
   public T pop() {
     T poppedNode = stack.fetch();
     stack.removeHead();
     return poppedNode;
   }
 
-  // Returns the number of nodes in the stack
+  /**
+   * Size of stack
+   *
+   * @return int number of nodes in stack
+   */
   public int size() {
     return stack.size();
   }
 
+  /**
+   * Check if stack is empty or not
+   *
+   * @return boolean true if the stack is empty, false otherwise
+   */
   public boolean isEmpty() {
     if (stack.size() == 0) {
       return true;

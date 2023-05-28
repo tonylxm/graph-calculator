@@ -11,18 +11,38 @@ public class Queue<T> {
     queue = new LinkedList<T>();
   }
 
+  /**
+   * Adds an element to the back of the queue
+   *
+   * @param node
+   */
   public void enqueue(T node) {
     queue.append(node);
   }
 
+  /**
+   * Removes the element from the front of the queue
+   *
+   * @return T
+   */
   public T dequeue() {
     return queue.removeHead();
   }
 
+  /**
+   * Size of queue
+   *
+   * @return int number of elements in queue
+   */
   public int size() {
     return queue.size();
   }
 
+  /**
+   * Check if queue is empty or not
+   *
+   * @return boolean true if the queue is empty, false otherwise
+   */
   public boolean isEmpty() {
     if (queue.size() == 0) {
       return true;
