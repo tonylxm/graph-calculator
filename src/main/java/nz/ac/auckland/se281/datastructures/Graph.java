@@ -21,7 +21,7 @@ import java.util.Set;
 public class Graph<T extends Comparable<T>> {
   private final Set<T> verticies;
   private final Set<Edge<T>> edges;
-  private HashMap<T, Set<T>> adjacencyMap;
+  private final HashMap<T, Set<T>> adjacencyMap;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;

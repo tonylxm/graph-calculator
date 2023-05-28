@@ -11,9 +11,9 @@ package nz.ac.auckland.se281.datastructures;
  * @param <T> The type of each vertex, that have a total ordering.
  */
 public class LinkedList<T> {
-  protected Node<T> head;
-  protected Node<T> tail;
-  protected int count;
+  private Node<T> head;
+  private Node<T> tail;
+  private int count;
 
   /**
    * Create new node with value and add to the front of the LinkedList. If it is the first node to
