@@ -31,9 +31,7 @@ public class Stack<T> {
    * @return T node at top of stack
    */
   public T pop() {
-    T poppedNode = stack.fetch();
-    stack.removeHead();
-    return poppedNode;
+    return stack.removeHead();
   }
 
   /**

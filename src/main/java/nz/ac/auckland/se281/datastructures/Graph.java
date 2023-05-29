@@ -6,6 +6,7 @@ package nz.ac.auckland.se281.datastructures;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,14 @@ public class Graph<T extends Comparable<T>> {
   private final Set<T> verticies;
   private final Set<Edge<T>> edges;
   private final HashMap<T, Set<T>> adjacencyMap;
+  // Comparator helps sorts numerically
+  private Comparator<T> comparator =
+      new Comparator<T>() {
+        @Override
+        public int compare(T arg0, T arg1) {
+          return Integer.parseInt((String) arg0) - Integer.parseInt((String) arg1);
+        }
+      };
 
   /**
    * Constructor method that initialises vertice and edge sets as well as populate adjacencyMap with
@@ -204,7 +213,8 @@ public class Graph<T extends Comparable<T>> {
           }
         }
         // Nodes at the same search depth should be visited in numerical order
-        Collections.sort(nodesAtCurrentDepth);
+        // Comparator sorts numerically rather than the default lexicographically
+        Collections.sort(nodesAtCurrentDepth, comparator);
         visited.addAll(nodesAtCurrentDepth);
 
         // queue the sorted nodes at the same search depth
@@ -242,7 +252,7 @@ public class Graph<T extends Comparable<T>> {
           }
           // Nodes at the same search depth should be visited in numerical order, but need to
           // reverse for the nature of the stack data structure
-          Collections.sort(nodesAtCurrentDepth);
+          Collections.sort(nodesAtCurrentDepth, comparator);
           Collections.reverse(nodesAtCurrentDepth);
 
           // stack the sorted nodes at the same search depth
@@ -290,7 +300,7 @@ public class Graph<T extends Comparable<T>> {
         }
       }
       // Nodes at the same search depth should be visited in numerical order
-      Collections.sort(nodesAtCurrentDepth);
+      Collections.sort(nodesAtCurrentDepth, comparator);
       visited.addAll(nodesAtCurrentDepth);
 
       // queue the sorted nodes at the same search depth
@@ -335,7 +345,7 @@ public class Graph<T extends Comparable<T>> {
           nodesAtCurrentDepth.add(neighbour);
         }
         // Nodes at the same search depth should be visited in numerical order
-        Collections.sort(nodesAtCurrentDepth);
+        Collections.sort(nodesAtCurrentDepth, comparator);
 
         // stack the sorted nodes at the same search depth
         for (T node : nodesAtCurrentDepth) {

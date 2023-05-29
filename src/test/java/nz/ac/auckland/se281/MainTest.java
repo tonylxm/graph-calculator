@@ -325,7 +325,7 @@ public class MainTest {
     public void TY_G_iterative_BFS() throws Exception {
       runCommands(OPEN_FILE, "g.txt", GRAPH_SEARCH_IBFS);
       assertContains("Successfully opened graph from file g.txt");
-      assertContains("[1, 2, 3, 4, 8, 9, 5, 6, 7]");
+      assertContains("[1, 2, 4, 30, 8, 9, 7, 5, 6]");
     }
   }
 }
