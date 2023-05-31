@@ -13,7 +13,7 @@ package nz.ac.auckland.se281.datastructures;
 public class LinkedList<T> {
   private Node<T> head;
   private Node<T> tail;
-  private int count;
+  private int count = 0;
 
   /**
    * Create new node with value and add to the front of the LinkedList.

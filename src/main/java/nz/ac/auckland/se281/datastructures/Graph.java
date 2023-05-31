@@ -78,7 +78,7 @@ public class Graph<T extends Comparable<T>> {
 
     for (T vertex : verticies) {
       if (!getEquivalenceClass(vertex).isEmpty()) {
-        rootVertices.add(Collections.min(getEquivalenceClass(vertex)));
+        rootVertices.add(Collections.min(getEquivalenceClass(vertex), comparator));
       }
     }
     return rootVertices;
@@ -125,7 +125,7 @@ public class Graph<T extends Comparable<T>> {
     for (T vertex1 : verticies) {
       for (T vertex2 : adjacencyMap.get(vertex1)) {
         for (T vertex3 : adjacencyMap.get(vertex2)) {
-          if (!adjacencyMap.get(vertex3).contains(vertex1)) {
+          if (!adjacencyMap.get(vertex1).contains(vertex3)) {
             return false;
           }
         }

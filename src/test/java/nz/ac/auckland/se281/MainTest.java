@@ -327,5 +327,47 @@ public class MainTest {
       assertContains("Successfully opened graph from file g.txt");
       assertContains("[1, 2, 4, 30, 8, 9, 7, 5, 6]");
     }
+
+    @Test
+    public void TY_J_transitivity() throws Exception {
+      runCommands(OPEN_FILE, "j.txt", CHECK_TRANSITIVITY);
+      assertContains("Successfully opened graph from file j.txt");
+      assertContains("The graph is transitive");
+    }
+
+    @Test
+    public void TY_K_roots() throws Exception {
+      runCommands(OPEN_FILE, "k.txt", LIST_ROOT_VERTICIES);
+      assertContains("Successfully opened graph from file k.txt");
+      assertContains("[0, 2]");
+    }
+
+    @Test
+    public void TY_L_iterative_BFS() throws Exception {
+      runCommands(OPEN_FILE, "l.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file l.txt");
+      assertContains("[1, 2, 3, 4]");
+    }
+
+    @Test
+    public void TY_L_recursive_BFS() throws Exception {
+      runCommands(OPEN_FILE, "l.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file l.txt");
+      assertContains("[1, 2, 3, 4]");
+    }
+
+    @Test
+    public void TY_L_iterative_DFS() throws Exception {
+      runCommands(OPEN_FILE, "l.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file l.txt");
+      assertContains("[1, 2, 4, 3]");
+    }
+
+    @Test
+    public void TY_L_recursive_DFS() throws Exception {
+      runCommands(OPEN_FILE, "l.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file l.txt");
+      assertContains("[1, 2, 4, 3]");
+    }
   }
 }
