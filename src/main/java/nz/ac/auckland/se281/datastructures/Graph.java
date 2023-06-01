@@ -2,6 +2,10 @@
 // DATE CREATED: 19/05/2023
 // LAST EDITED: 28/05/2023
 
+// To do list:
+// change adjacencyList() to LinkedList
+// Doubly-Linked List for queue implementation?
+
 package nz.ac.auckland.se281.datastructures;
 
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ import java.util.Set;
 public class Graph<T extends Comparable<T>> {
   private final Set<T> verticies;
   private final Set<Edge<T>> edges;
-  private final HashMap<T, Set<T>> adjacencyMap;
+  private final HashMap<T, LinkedList<T>> adjacencyMap;
   // Comparator helps sorts numerically
   private Comparator<T> comparator =
       new Comparator<T>() {
@@ -43,7 +47,7 @@ public class Graph<T extends Comparable<T>> {
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
     this.edges = edges;
-    adjacencyMap = new HashMap<>();
+    adjacencyMap = new HashMap<T, LinkedList<T>>();
 
     for (T vertex : verticies) {
       adjacencyMap.put(vertex, destinationsWithSameSourceVertex(vertex));
@@ -60,7 +64,7 @@ public class Graph<T extends Comparable<T>> {
   public Set<T> getRoots() {
     // Set of rootVertices is a subset of vertices of a graph
     Set<T> rootVertices = new HashSet<T>();
-    Set<T> setOfAllDestinationVertices = new HashSet<T>();
+    LinkedList<T> setOfAllDestinationVertices = new LinkedList<T>();
 
     // Form setOfAllDestinationVertices
     for (T vertex : verticies) {
@@ -106,8 +110,9 @@ public class Graph<T extends Comparable<T>> {
    */
   public boolean isSymmetric() {
     for (T vertex1 : verticies) {
-      for (T vertex2 : adjacencyMap.get(vertex1)) {
-        if (!adjacencyMap.get(vertex2).contains(vertex1)) {
+      for (T vertex2 : verticies) {
+        if (adjacencyMap.get(vertex2).contains(vertex1)
+            && !adjacencyMap.get(vertex1).contains(vertex2)) {
           return false;
         }
       }
@@ -123,9 +128,11 @@ public class Graph<T extends Comparable<T>> {
    */
   public boolean isTransitive() {
     for (T vertex1 : verticies) {
-      for (T vertex2 : adjacencyMap.get(vertex1)) {
-        for (T vertex3 : adjacencyMap.get(vertex2)) {
-          if (!adjacencyMap.get(vertex1).contains(vertex3)) {
+      for (T vertex2 : verticies) {
+        for (T vertex3 : verticies) {
+          if (adjacencyMap.get(vertex1).contains(vertex2)
+              && adjacencyMap.get(vertex2).contains(vertex3)
+              && !adjacencyMap.get(vertex1).contains(vertex3)) {
             return false;
           }
         }
@@ -135,22 +142,18 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * If vertex1 -> vertex2 and vertex2 -> vertex3 then vertex1 must equal vertex3 for this graph to
+   * If vertex1 -> vertex2 and vertex2 -> vertex1 then vertex1 must equal vertex2 for this graph to
    * be antisymmetric.
    *
    * @return boolean value - true if the graph is antisymmetric, false if not antisymmetric
    */
   public boolean isAntiSymmetric() {
     for (T vertex1 : verticies) {
-      for (T vertex2 : adjacencyMap.get(vertex1)) {
-        for (T vertex3 : adjacencyMap.get(vertex2)) {
-          if (vertex3 == vertex1) {
-            // Self-loops allowed (self-loop if vertex1 and vertex2 (destinations of edges leaving
-            // vertex1 are the same vertex)
-            if (vertex1 != vertex2) {
-              return false;
-            }
-          }
+      for (T vertex2 : verticies) {
+        if (adjacencyMap.get(vertex1).contains(vertex2)
+            && adjacencyMap.get(vertex2).contains(vertex1)
+            && vertex1 != vertex2) {
+          return false;
         }
       }
     }
@@ -170,7 +173,8 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * An equivalence class of vertex1 is the set of all vertices that can be reached from vertex1.
+   * An equivalence class of vertex1 is the set of all vertices that can be reached from input
+   * vertex.
    *
    * @param vertex vertex to get equivalence class for
    * @return Set of vertices in the equivalence class
@@ -182,8 +186,8 @@ public class Graph<T extends Comparable<T>> {
     if (!isEquivalence()) {
       return equivalenceClass;
     } else {
-      for (T destination : adjacencyMap.get(vertex)) {
-        equivalenceClass.add(destination);
+      for (int i = 0; i < adjacencyMap.get(vertex).size(); i++) {
+        equivalenceClass.add(adjacencyMap.get(vertex).get(i));
       }
       return equivalenceClass;
     }
@@ -207,9 +211,11 @@ public class Graph<T extends Comparable<T>> {
 
       while (!queue.isEmpty()) {
         current = queue.dequeue();
-        for (T neighbour : adjacencyMap.get(current)) {
-          if (!visited.contains(neighbour)) {
-            nodesAtCurrentDepth.add(neighbour);
+        for (T neighbour : verticies) {
+          if (adjacencyMap.get(current).contains(neighbour)) {
+            if (!visited.contains(neighbour)) {
+              nodesAtCurrentDepth.add(neighbour);
+            }
           }
         }
         // Nodes at the same search depth should be visited in numerical order
@@ -247,8 +253,10 @@ public class Graph<T extends Comparable<T>> {
         current = stack.pop();
         if (!visited.contains(current)) {
           visited.add(current);
-          for (T neighbour : adjacencyMap.get(current)) {
-            nodesAtCurrentDepth.add(neighbour);
+          for (T neighbour : verticies) {
+            if (adjacencyMap.get(current).contains(neighbour)) {
+              nodesAtCurrentDepth.add(neighbour);
+            }
           }
           // Nodes at the same search depth should be visited in numerical order, but need to
           // reverse for the nature of the stack data structure
@@ -294,9 +302,11 @@ public class Graph<T extends Comparable<T>> {
 
     while (!queue.isEmpty()) {
       current = queue.dequeue();
-      for (T neighbour : adjacencyMap.get(current)) {
-        if (!visited.contains(neighbour)) {
-          nodesAtCurrentDepth.add(neighbour);
+      for (T neighbour : verticies) {
+        if (adjacencyMap.get(current).contains(neighbour)) {
+          if (!visited.contains(neighbour)) {
+            nodesAtCurrentDepth.add(neighbour);
+          }
         }
       }
       // Nodes at the same search depth should be visited in numerical order
@@ -341,8 +351,10 @@ public class Graph<T extends Comparable<T>> {
       current = stack.pop();
       if (!visited.contains(current)) {
         visited.add(current);
-        for (T neighbour : adjacencyMap.get(current)) {
-          nodesAtCurrentDepth.add(neighbour);
+        for (T neighbour : verticies) {
+          if (adjacencyMap.get(current).contains(neighbour)) {
+            nodesAtCurrentDepth.add(neighbour);
+          }
         }
         // Nodes at the same search depth should be visited in numerical order
         Collections.sort(nodesAtCurrentDepth, comparator);
@@ -365,12 +377,12 @@ public class Graph<T extends Comparable<T>> {
    * @param vertex vertex to find neighbour vertices from
    * @return Set of destination vertices of vertex in parameter
    */
-  public Set<T> destinationsWithSameSourceVertex(T vertex) {
-    Set<T> destinationsWithSameSourceVertex = new HashSet<T>();
+  public LinkedList<T> destinationsWithSameSourceVertex(T vertex) {
+    LinkedList<T> destinationsWithSameSourceVertex = new LinkedList<T>();
 
     for (Edge<T> edge : edges) {
       if (edge.getSource().equals(vertex)) {
-        destinationsWithSameSourceVertex.add(edge.getDestination());
+        destinationsWithSameSourceVertex.append(edge.getDestination());
       }
     }
     return destinationsWithSameSourceVertex;

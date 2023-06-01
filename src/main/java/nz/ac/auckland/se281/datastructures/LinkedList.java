@@ -82,4 +82,38 @@ public class LinkedList<T> {
   public int size() {
     return count;
   }
+
+  public boolean contains(T value) {
+    for (int i = 0; i < count; i++) {
+      if (this.get(i) == value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public T get(int index) {
+    return traverseList(index).getValue();
+  }
+
+  // helper
+  public Node<T> traverseList(int index) {
+    Node<T> nodeAtIndex;
+
+    if (index != 0) {
+      nodeAtIndex = head;
+      for (int i = 0; i < index; i++) {
+        nodeAtIndex = nodeAtIndex.getNext();
+      }
+    } else {
+      return head;
+    }
+    return nodeAtIndex;
+  }
+
+  public void addAll(LinkedList<T> list) {
+    for (int i = 0; i < list.size(); i++) {
+      this.append(list.get(i));
+    }
+  }
 }
