@@ -75,7 +75,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Checks if value if in LinkedList
+   * Checks if value if in LinkedList.
    *
    * @param value value to check if in LinkedList
    * @return true if value is in LinkedList, false if not.
@@ -90,7 +90,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Returns value at index in LinkedList
+   * Returns value at index in LinkedList.
    *
    * @param index index of node in LinkedList to find
    * @return value of node at given index
@@ -100,7 +100,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Helper method that iterates through this LinkedList and returns node at given index
+   * Helper method that iterates through this LinkedList and returns node at given index.
    *
    * @param index index of node to get
    * @return node at index given
@@ -110,17 +110,19 @@ public class LinkedList<T> {
 
     if (index != 0) {
       nodeAtIndex = head;
+      // iterate through
       for (int i = 0; i < index; i++) {
         nodeAtIndex = nodeAtIndex.getNext();
       }
     } else {
+      // if index = 0, return the only node in the LinkedList; head
       return head;
     }
     return nodeAtIndex;
   }
 
   /**
-   * All all nodes in given LinkedList to this LinkedList
+   * All all nodes in given LinkedList to this LinkedList.
    *
    * @param list LinkedList to get all nodes from to add
    */
