@@ -269,9 +269,6 @@ public class MainTest {
       super(Main.class);
     }
 
-    // Can use Union and
-    // Intersection to check some properties equivalence classes (empty or equal)
-
     @Test
     public void TY_D_antisymmetry() throws Exception {
       runCommands(OPEN_FILE, "d.txt", CHECK_ANTISYMMETRY);
@@ -368,6 +365,110 @@ public class MainTest {
       runCommands(OPEN_FILE, "l.txt", GRAPH_SEARCH_IDFS);
       assertContains("Successfully opened graph from file l.txt");
       assertContains("[1, 2, 4, 3]");
+    }
+
+    // dfs and bfs random graph, you can delete the successfully opend from file test case
+    @Test
+    public void TY_01_M_iterative_BFS() throws Exception {
+      runCommands(OPEN_FILE, "m.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file m.txt");
+      assertContains("[1, 3, 5, 6, 9, 11, 7, 2, 12, 4, 8, 10]");
+    }
+
+    @Test
+    public void TY_02_M_iterative_DFS() throws Exception {
+      runCommands(OPEN_FILE, "m.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file m.txt");
+      assertContains("[1, 3, 5, 7, 6, 2, 4, 10, 8, 9, 11, 12]");
+    }
+
+    @Test
+    public void TY_03_M_recursive_BFS() throws Exception {
+      runCommands(OPEN_FILE, "m.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file m.txt");
+      assertContains("[1, 3, 5, 6, 9, 11, 7, 2, 12, 4, 8, 10]");
+    }
+
+    @Test
+    public void TY_04_M_recursive_DFS() throws Exception {
+      runCommands(OPEN_FILE, "m.txt", GRAPH_SEARCH_RDFS);
+      assertContains("Successfully opened graph from file m.txt");
+      assertContains("[1, 3, 5, 7, 6, 2, 4, 10, 8, 9, 11, 12]");
+    }
+
+    // dfs and bfs with 25 vertices
+    @Test
+    public void TY_01_N_iterative_BFS() throws Exception {
+      runCommands(OPEN_FILE, "n.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file n.txt");
+      assertContains(
+          "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,"
+              + " 24]");
+    }
+
+    @Test
+    public void TY_02_N_iterative_DFS() throws Exception {
+      runCommands(OPEN_FILE, "n.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file n.txt");
+      assertContains(
+          "[0, 1, 3, 7, 15, 19, 22, 24, 8, 4, 9, 16, 20, 23, 10, 2, 5, 11, 17, 21, 12, 6, 13, 18,"
+              + " 14]");
+    }
+
+    @Test
+    public void TY_03_N_recursive_BFS() throws Exception {
+      runCommands(OPEN_FILE, "n.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file n.txt");
+      assertContains(
+          "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,"
+              + " 24]");
+    }
+
+    @Test
+    public void TY_04_N_recursive_DFS() throws Exception {
+      runCommands(OPEN_FILE, "n.txt", GRAPH_SEARCH_RDFS);
+      assertContains("Successfully opened graph from file n.txt");
+      assertContains(
+          "[0, 1, 3, 7, 15, 19, 22, 24, 8, 4, 9, 16, 20, 23, 10, 2, 5, 11, 17, 21, 12, 6, 13, 18,"
+              + " 14]");
+    }
+
+    // Check if the roots are given in order
+    @Test
+    public void TY_01_O_check_roots() throws Exception {
+      runCommands(OPEN_FILE, "o.txt", LIST_ROOT_VERTICIES);
+      assertContains("Successfully opened graph from file o.txt");
+      assertContains("[0, 2, 10, 12, 20, 100]");
+      assertDoesNotContain("[0, 10, 12, 100, 2, 20]");
+    }
+
+    // dfs and bfs of o.txt
+    @Test
+    public void TY_02_O_IBFS() throws Exception {
+      runCommands(OPEN_FILE, "o.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file o.txt");
+      assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
+    }
+
+    @Test
+    public void TY_03_O_RBFS() throws Exception {
+      runCommands(OPEN_FILE, "o.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file o.txt");
+      assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
+    }
+
+    @Test
+    public void TY_04_O_IDFS() throws Exception {
+      runCommands(OPEN_FILE, "o.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file o.txt");
+      assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
+    }
+
+    @Test
+    public void TY_05_O_RDFS() throws Exception {
+      runCommands(OPEN_FILE, "o.txt", GRAPH_SEARCH_RDFS);
+      assertContains("Successfully opened graph from file o.txt");
+      assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
     }
   }
 }

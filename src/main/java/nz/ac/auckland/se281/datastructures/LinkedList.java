@@ -1,6 +1,6 @@
 // AUTHOR: Tony Lim
 // DATE CREATED: 26/05/2023
-// LAST EDITED: 28/05/2023
+// LAST EDITED: 03/06/2023
 
 package nz.ac.auckland.se281.datastructures;
 
@@ -54,15 +54,6 @@ public class LinkedList<T> {
   }
 
   /**
-   * Fetch the value of the head node.
-   *
-   * @return T value of head node
-   */
-  public T fetch() {
-    return head.getValue();
-  }
-
-  /**
    * Remove the head node from LinkedList.
    *
    * @return T value of head node
@@ -83,6 +74,12 @@ public class LinkedList<T> {
     return count;
   }
 
+  /**
+   * Checks if value if in LinkedList
+   *
+   * @param value value to check if in LinkedList
+   * @return true if value is in LinkedList, false if not.
+   */
   public boolean contains(T value) {
     for (int i = 0; i < count; i++) {
       if (this.get(i) == value) {
@@ -92,11 +89,22 @@ public class LinkedList<T> {
     return false;
   }
 
+  /**
+   * Returns value at index in LinkedList
+   *
+   * @param index index of node in LinkedList to find
+   * @return value of node at given index
+   */
   public T get(int index) {
     return traverseList(index).getValue();
   }
 
-  // helper
+  /**
+   * Helper method that iterates through this LinkedList and returns node at given index
+   *
+   * @param index index of node to get
+   * @return node at index given
+   */
   public Node<T> traverseList(int index) {
     Node<T> nodeAtIndex;
 
@@ -111,6 +119,11 @@ public class LinkedList<T> {
     return nodeAtIndex;
   }
 
+  /**
+   * All all nodes in given LinkedList to this LinkedList
+   *
+   * @param list LinkedList to get all nodes from to add
+   */
   public void addAll(LinkedList<T> list) {
     for (int i = 0; i < list.size(); i++) {
       this.append(list.get(i));

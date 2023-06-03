@@ -1,10 +1,6 @@
 // AUTHOR: Tony Lim
 // DATE CREATED: 19/05/2023
-// LAST EDITED: 28/05/2023
-
-// To do list:
-// change adjacencyList() to LinkedList
-// Doubly-Linked List for queue implementation?
+// LAST EDITED: 03/06/2023
 
 package nz.ac.auckland.se281.datastructures;
 
@@ -15,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A graph that is composed of a set of verticies and edges.
@@ -63,7 +60,7 @@ public class Graph<T extends Comparable<T>> {
    */
   public Set<T> getRoots() {
     // Set of rootVertices is a subset of vertices of a graph
-    Set<T> rootVertices = new HashSet<T>();
+    Set<T> rootVertices = new TreeSet<T>(comparator);
     LinkedList<T> setOfAllDestinationVertices = new LinkedList<T>();
 
     // Form setOfAllDestinationVertices
@@ -85,6 +82,7 @@ public class Graph<T extends Comparable<T>> {
         rootVertices.add(Collections.min(getEquivalenceClass(vertex), comparator));
       }
     }
+
     return rootVertices;
   }
 
@@ -316,7 +314,11 @@ public class Graph<T extends Comparable<T>> {
       // queue the sorted nodes at the same search depth
       for (T node : nodesAtCurrentDepth) {
         queue.enqueue(node);
-        recursiveBfs(node, queue, visited); // Call the recursive function
+      }
+
+      // Call the recursive function
+      for (T node : nodesAtCurrentDepth) {
+        recursiveBfs(node, queue, visited);
       }
     }
   }
