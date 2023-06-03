@@ -128,6 +128,7 @@ public class Graph<T extends Comparable<T>> {
     for (T vertex1 : verticies) {
       for (T vertex2 : verticies) {
         for (T vertex3 : verticies) {
+          // if a -> b and b -> c and a -> c does not exist, return false
           if (adjacencyMap.get(vertex1).contains(vertex2)
               && adjacencyMap.get(vertex2).contains(vertex3)
               && !adjacencyMap.get(vertex1).contains(vertex3)) {
@@ -136,6 +137,7 @@ public class Graph<T extends Comparable<T>> {
         }
       }
     }
+    // If all cases satsify transitivity, the whole graph is transitive so return true
     return true;
   }
 
@@ -148,6 +150,7 @@ public class Graph<T extends Comparable<T>> {
   public boolean isAntiSymmetric() {
     for (T vertex1 : verticies) {
       for (T vertex2 : verticies) {
+        // if a -> b and b -> c and a != c, return false
         if (adjacencyMap.get(vertex1).contains(vertex2)
             && adjacencyMap.get(vertex2).contains(vertex1)
             && vertex1 != vertex2) {
@@ -155,6 +158,7 @@ public class Graph<T extends Comparable<T>> {
         }
       }
     }
+    // If all cases satsify antisymmetry, the whole graph is antisymmetric so return true
     return true;
   }
 
