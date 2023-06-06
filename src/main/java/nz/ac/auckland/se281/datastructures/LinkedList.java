@@ -1,6 +1,6 @@
 // AUTHOR: Tony Lim
 // DATE CREATED: 26/05/2023
-// LAST EDITED: 03/06/2023
+// LAST EDITED: 04/06/2023
 
 package nz.ac.auckland.se281.datastructures;
 
@@ -115,14 +115,14 @@ public class LinkedList<T> {
         nodeAtIndex = nodeAtIndex.getNext();
       }
     } else {
-      // if index = 0, return the only node in the LinkedList; head
+      // If index = 0, return the only node in the LinkedList; head
       return head;
     }
     return nodeAtIndex;
   }
 
   /**
-   * All all nodes in given LinkedList to this LinkedList.
+   * Add all nodes in given LinkedList to this LinkedList.
    *
    * @param list LinkedList to get all nodes from to add
    */
