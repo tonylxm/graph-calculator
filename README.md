@@ -1,5 +1,7 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/EoVwWP_A)
-# Assignment 3
+# Graph Calculator
 
-You will find instructions for this assignment on the course website.
-
+- Represents graphs using object-oriented concepts
+- Implement common data structures and understand their complexity.
+- JUnit testing
+- BFS and DFS algorithms (both iterative and recursive implementations)
+- Can calculate graph relations: symmetric, reflexive, transitive and equivalence class.
