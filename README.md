@@ -9,6 +9,8 @@ I scored 100% for this project (functionality + OO Design + codestyle).
 ## Project Requirements
 - Represent graphs using object-oriented concepts
 - Implement my own data structures and understand their time & space complexity
+    - allow for O(1) insertion of a vertex that has been discovered
+    - O(1) removal of a vertex to be visited
 - Unit testing with JUnit testing framework to write my own test cases
 - Javadocs comments for best practice documentation
 
